@@ -1,0 +1,6 @@
+/source/dir/test/1  3f786850e387550fdab836ed7e6dc881de23001b
+/source/dir/test/childFolder/2  89e6c98d92887913cadf06b2adb97f26cde4849b
+/source/dir/test/3 hasSpace  2b66fd261ee5c6cfc8de7fa466bab600bcfe4f69
+/source/dir/test/4 notAFile  2b66fd261ee5c6cfd8de7fa466bab600bcfe4f69
+/source/dir/test/4 willHashFail  2b66fd261ee5c6cfd8de7fa466bab600bcfe4f69
+/source/dir/test/5  094e3afb2fe8dfe82f63731cdcd3b999f4856cff

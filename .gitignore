@@ -1,0 +1,8 @@
+/src/main/resources/testdisk-short.log
+/src/main/resources/testdisk.log
+.gradle
+.idea
+build
+!build/libs/CopyCheck-*.jar
+gradlew.bat
+
