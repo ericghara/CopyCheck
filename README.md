@@ -47,7 +47,7 @@ Invalid: /source/dir/test/4 willHashFail
 Summary: 4 of 6 are valid
 ```
 ### Explanation
-- CopyCheck relativizes paths against ```/source/dir/test/1``` (source): <div>```/source/dir/test/1 -> 1```</div>
+- CopyCheck relativizes paths against ```/source/dir/test``` (source): <div>```/source/dir/test/1 -> 1```</div>
 - CopyCheck resolves the relativized path against the destination: <div>```1 -> src/test/resources/demo/1```</div>
 - Copy check hashes the file (if present) in destination
 - The hash code is compared to the code read in from srcFileList.
