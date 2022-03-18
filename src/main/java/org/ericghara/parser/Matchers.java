@@ -47,7 +47,7 @@ public class Matchers {
             throw new IllegalArgumentException(
                     format("No exact bit to hex conversion for %d", bits) );
         }
-        var regex = format("(?<=^|(  )|\\t)[0-9a-fA-F]{%d}\\b", hexes);
+        var regex = format("(?<=^( )?|(  )|\\t)[0-9a-fA-F]{%d}\\b", hexes);
         return Pattern.compile(regex)
                       .matcher("");
     }
