@@ -53,4 +53,4 @@ Summary: 4 of 6 are valid
 - The hash code is compared to the code read in from srcFileList.
 ### Invalid
 - ```/source/dir/test/4 notAFile``` Failed because the file didn't exist.
-- ```/source/dir/test/4 notAFile``` Failed because the hash code of the file didn't match the srcFileList.
+- ```/source/dir/test/4 willHashFail``` Failed because the hash code of the file didn't match the srcFileList.
