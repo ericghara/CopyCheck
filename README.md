@@ -58,8 +58,8 @@ Is just a list of source file paths and hash digests.  Paths should be absolute.
             <td>
                 <pre>3f786850e387550fdab836ed7e6dc881de23001b  /source/dir/test/1</pre>
             </td>
-                OK!
             <td> 
+                OK!
             </td>
             <td> 
             </td>
@@ -68,8 +68,8 @@ Is just a list of source file paths and hash digests.  Paths should be absolute.
             <td>
                 <pre>530  1-Mar-2022 18:12 /source/dir/test/1  3f786850e387550fdab836ed7e6dc881de23001b</pre>
             </td>
-                OK!
             <td> 
+                OK!
             </td>
             <td> 
             </td>
@@ -78,11 +78,11 @@ Is just a list of source file paths and hash digests.  Paths should be absolute.
             <td>
                 <pre>/source/dir/test/3 hasSpace  2b66fd261ee5c6cfc8de7fa466bab600bcfe4f69</pre>
             </td>
-                OK!
             <td>
-                parsed path is <code>/source/dir/test/3 hasSpace"</code>
+                OK!
             </td>
             <td> 
+                parsed path is <code>/source/dir/test/3 hasSpace</code>
             </td>
         </tr>
         <tr>     
@@ -92,12 +92,13 @@ Is just a list of source file paths and hash digests.  Paths should be absolute.
             <td>
                 OK!
             </td>
-                parsed path is <code>/source/dir/test/3</code>
             <td> 
+                parsed path is <code>/source/dir/test/3</code>
             </td>
         </tr>    
     </tbody>
 </table> 
+
 ## Build
 ```gradle build```
 ## Demo
