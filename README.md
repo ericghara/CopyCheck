@@ -22,13 +22,13 @@ Is just a list of source file paths and hash digests.  Paths should be absolute.
     <thead>
         <tr>
             <td>
-                Line Text
+                <b>Line Text</b>
             </td>
             <td>
-                Validity
+                <b>Validity</b>
             </td>
             <td>
-                Explanation
+                <b>Explanation</b>
             </td>
         </tr>
     </thead>
