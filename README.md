@@ -18,10 +18,23 @@ CopyCheck is used to validate that files were properly moved from a source to de
 ### Source File List (srcFileList)
 Is just a list of source file paths and hash digests.  Paths should be absolute.  Digests should be in hexadecimal (not required with --NO-HASH).   The format of the srcFileList is very flexible, each field must be delimited by two or more space characters.
 #### Formatting Examples:
+<table> 
+  <tr>
+    <td>
+        <pre>/source/dir/test/1  3f786850e387550fdab836ed7e6dc881de23001b</pre>       
+        <pre>/source/dir/test/1 3f786850e387550fdab836ed7e6dc881de23001b</pre> 
+    </td>
+    <td>
+        OK!           
+        NOT OK
+    </td>
+    <td>
+        <br>
+        only single space between columns     
+    </td>
+  </tr>
+</table>
 ```
-/source/dir/test/1  3f786850e387550fdab836ed7e6dc881de23001b    OK!
-/source/dir/test/1 3f786850e387550fdab836ed7e6dc881de23001b     NOT OK: only single space between columns
-
 3f786850e387550fdab836ed7e6dc881de23001b  /source/dir/test/1    OK!
 
 530  1-Mar-2022 18:12 /source/dir/test/1  3f786850e387550fdab836ed7e6dc881de23001b  OK!
