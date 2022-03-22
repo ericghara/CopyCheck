@@ -1,6 +1,6 @@
 # CopyCheck
 
-CopyCheck is used to validate that files were properly moved from a source to destination.  The typical use cases for CopyCheck would be to verify the move of a very large number of files or to check that two folders contain the same versions of a set of files.
+CopyCheck is used to validate that a set of files represent a known version/state.  The typical use cases for CopyCheck would be to verify the move of a very large number of files or to check that two folders contain the same versions of a set of files.
 
 ## Usage
 
