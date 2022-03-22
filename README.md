@@ -19,29 +19,85 @@ CopyCheck is used to validate that files were properly moved from a source to de
 Is just a list of source file paths and hash digests.  Paths should be absolute.  Digests should be in hexadecimal (not required with --NO-HASH).   The format of the srcFileList is very flexible, each field must be delimited by two or more space characters.
 #### Formatting Examples:
 <table> 
-  <tr>
-    <td>
-        <pre>/source/dir/test/1  3f786850e387550fdab836ed7e6dc881de23001b</pre>       
-        <pre>/source/dir/test/1 3f786850e387550fdab836ed7e6dc881de23001b</pre> 
-    </td>
-    <td>
-        OK!           
-        NOT OK
-    </td>
-    <td>
-        <br>
-        only single space between columns     
-    </td>
-  </tr>
-</table>
-```
-3f786850e387550fdab836ed7e6dc881de23001b  /source/dir/test/1    OK!
-
-530  1-Mar-2022 18:12 /source/dir/test/1  3f786850e387550fdab836ed7e6dc881de23001b  OK!
-
-/source/dir/test/3 hasSpace  2b66fd261ee5c6cfc8de7fa466bab600bcfe4f69  OK! (parsed path is "/source/dir/test/3 hasSpace")
-/source/dir/test/3  hasSpaces  2b66fd261ee5c6cfc8de7fa466bab600bcfe4f69  OK! (parsed path is "/source/dir/test/3")
-```   
+    <thead>
+        <tr>
+            <td>
+                Line Text
+            </td>
+            <td>
+                Validity
+            </td>
+            <td>
+                Explanation
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <pre>/source/dir/test/1  3f786850e387550fdab836ed7e6dc881de23001b</pre>
+            </td>
+            <td>
+                OK!           
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+          <td>
+            <pre>/source/dir/test/1 3f786850e387550fdab836ed7e6dc881de23001b</pre> 
+          </td>
+          <td>
+            NOT OK
+          </td>
+          <td>
+            only single space between columns
+          </td>
+        </tr>
+        <tr>
+            <td>
+                <pre>3f786850e387550fdab836ed7e6dc881de23001b  /source/dir/test/1</pre>
+            </td>
+                OK!
+            <td> 
+            </td>
+            <td> 
+            </td>
+        </tr>
+        <tr>     
+            <td>
+                <pre>530  1-Mar-2022 18:12 /source/dir/test/1  3f786850e387550fdab836ed7e6dc881de23001b</pre>
+            </td>
+                OK!
+            <td> 
+            </td>
+            <td> 
+            </td>
+        </tr>
+        <tr>     
+            <td>
+                <pre>/source/dir/test/3 hasSpace  2b66fd261ee5c6cfc8de7fa466bab600bcfe4f69</pre>
+            </td>
+                OK!
+            <td>
+                parsed path is <code>/source/dir/test/3 hasSpace"</code>
+            </td>
+            <td> 
+            </td>
+        </tr>
+        <tr>     
+            <td>
+                <pre>/source/dir/test/3  hasSpaces  2b66fd261ee5c6cfc8de7fa466bab600bcfe4f69</pre>
+            </td>
+            <td>
+                OK!
+            </td>
+                parsed path is <code>/source/dir/test/3</code>
+            <td> 
+            </td>
+        </tr>    
+    </tbody>
+</table> 
 ## Build
 ```gradle build```
 ## Demo
