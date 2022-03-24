@@ -37,7 +37,7 @@ public class ArgumentValidator<K extends EnumKey, V extends ArgDefinitionInterfa
             return false;
         }
         return hasRequired(foundArgs) &&
-                validateAll(foundArgs, appArguments);
+                validateAll(foundArgs);
     }
 
     public boolean isValid() {
@@ -49,7 +49,7 @@ public class ArgumentValidator<K extends EnumKey, V extends ArgDefinitionInterfa
                 foundArgs.getFound(REQUIRED).size();
     }
 
-    boolean validateAll(FoundArgs<K, V, U> allFound, ApplicationArguments appArgs) {
+    boolean validateAll(FoundArgs<K, V, U> allFound) {
         var validity = allFound.getGroupFilters()
                                         .stream()
                                         .map(allFound::getFound)

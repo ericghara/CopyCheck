@@ -4,9 +4,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.ericghara.argument.ArgDefinition;
-import org.ericghara.argument.ArgEntryGrouper;
 import org.ericghara.argument.ArgumentGroup;
-import org.ericghara.argument.EnumArgPair;
 import org.ericghara.argument.FoundArgs;
 import org.ericghara.argument.Id.AppArg;
 import org.ericghara.argument.Id.ArgGroupKey;
@@ -27,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -169,29 +165,6 @@ public class FileChecker {
                 "Unrecognized mode setting.  This is likely caused by an improper app configuration.");
     }
 
-    String getHashAlgo(ArgumentGroup<AppArg, SingleValueArgument> optional) {
-        Supplier<ImproperApplicationArgumentsException> unspecifiedAlgo = () ->
-                new ImproperApplicationArgumentsException("No Hash Algorithm was specified");
-
-        Function<EnumArgPair<AppArg, SingleValueArgument>, Boolean>
-                matchHashGp = (pair) -> pair.getArgData()
-                                            .groups()
-                                            .contains(HASH_ALGO);
-        ArgEntryGrouper<Boolean, AppArg, SingleValueArgument> grouper =
-                new ArgEntryGrouper<>(optional, matchHashGp);
-        var algos =
-                grouper.get(true).orElseThrow(unspecifiedAlgo);
-        var matches = algos.getArgIds();
-        if (matches.size() > 1) {
-            throw new ImproperApplicationArgumentsException("Multiple hash algorithms were specified");
-        }
-        var  arg = matches.stream()
-                                   .findFirst()
-                                   .orElseThrow(unspecifiedAlgo);
-        return optional.get(arg)
-                       .name();
-    }
-
     static public AppArg oneMatchOrThrows(ArgGroupKey key,
                                    FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs) {
         Set<AppArg> setArgs = foundArgs.getFound(key)
@@ -202,5 +175,5 @@ public class FileChecker {
         }
         return setArgs.iterator()
                 .next();
-    };
+    }
 }

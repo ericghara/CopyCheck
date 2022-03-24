@@ -11,6 +11,5 @@ public enum AppArg implements EnumKey {
     SHA_256,
     NO_HASH,
     STD_LIST,
-    NON_STD_LIST;
 }
 

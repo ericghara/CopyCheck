@@ -1,6 +1,5 @@
 package org.ericghara.configs;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ericghara.argument.ArgDefinition;
 import org.ericghara.argument.ArgumentGroup;
@@ -21,7 +20,6 @@ import static org.ericghara.argument.Id.ArgGroupKey.*;
 
 @Configuration
 @Slf4j
-@AllArgsConstructor
 public class ValidatorConfig {
 
     @Bean

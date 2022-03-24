@@ -51,13 +51,4 @@ public class Matchers {
         return Pattern.compile(regex)
                       .matcher("");
     }
-
-    @NonNull
-    public static Matcher matchLineContainingChildPathOf(String parentPath) {
-        final String BolToWhitespacePreceding = "^(.*)(?<=\\s)";
-        final String toEol = "%s(.*)$";
-        var regEx = BolToWhitespacePreceding + parentPath + toEol;
-        return Pattern.compile(regEx)
-                      .matcher("");
-    }
 }
