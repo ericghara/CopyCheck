@@ -1,6 +1,7 @@
 package org.ericghara.exceptions;
 
 public class ImproperApplicationArgumentsException extends RuntimeException{
+
     public ImproperApplicationArgumentsException() {
     }
 

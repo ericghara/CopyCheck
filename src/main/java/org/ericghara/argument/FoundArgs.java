@@ -23,12 +23,12 @@ import static org.ericghara.argument.Id.ArgGroupKey.*;
 @Component
 public class FoundArgs<K extends EnumKey, V extends ArgDefinitionInterface, U extends ArgValuesInterface> {
 
-    static final List<ArgGroupKey> GROUP_FILTERS =
+    private static final List<ArgGroupKey> GROUP_FILTERS =
             List.of(REQUIRED, MODE, HASH_ALGO, LIST_FORMAT);
 
-    private Map<ArgGroupKey, ArgumentGroup<K,V>> sortedAll;
-    private Map<ArgGroupKey, ArgumentGroup<K,U>> sortedFound;
-    private ArgumentGroup<K, V> all;
+    final private Map<ArgGroupKey, ArgumentGroup<K,V>> sortedAll;
+    final private Map<ArgGroupKey, ArgumentGroup<K,U>> sortedFound;
+    final private ArgumentGroup<K, V> all;
 
     public FoundArgs(@NonNull ArgumentGroup<K, V> all,
                      ApplicationArguments appArgs,
@@ -87,19 +87,6 @@ public class FoundArgs<K extends EnumKey, V extends ArgDefinitionInterface, U ex
         return foundOrDefault;
     }
 
-//    Use ArgWithValuesGroupGenerator
-//    ArgumentGroup<K,U> argGroupConverter(ArgumentGroup<K,V> group,
-//                                         ApplicationArguments appArgs,
-//                                         BiFunction<V, List<String>, U> constructor) {
-//        List<EnumArgPair<K,U>> entries = group.stream().map( (entry) -> {
-//            var k = entry.getKey();
-//            var arg = entry.getValue();
-//            var argValues = appArgs.getOptionValues(arg.name() );
-//            return new EnumArgPair<>(k, constructor.apply(arg, argValues) );
-//        }).toList();
-//        return new ArgumentGroup<>(entries);
-//    }
-
     Map<ArgGroupKey, ArgumentGroup<K, V>> partitionBy(ArgumentGroup<K, V> parentGroup, List<ArgGroupKey> sortKeys) {
         var grouper = new ArgEntryGrouper<ArgGroupKey, K,V>(parentGroup,
                 sortKeyGrouper(sortKeys) );
@@ -114,11 +101,9 @@ public class FoundArgs<K extends EnumKey, V extends ArgDefinitionInterface, U ex
     }
 
     Function <EnumArgPair<K, V>, Boolean> sortByDefault() {
-        return (EnumArgPair<K,V> p)  -> {
-            return p.getValue()
-                    .groups()
-                    .contains(DEFAULT);
-        };
+        return (EnumArgPair<K,V> p)  -> p.getValue()
+                .groups()
+                .contains(DEFAULT);
     }
 
     Function<EnumArgPair<K, V>, ArgGroupKey> sortKeyGrouper(List<ArgGroupKey> sortKeys) {

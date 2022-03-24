@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -33,7 +34,7 @@ public class ArgEntryGrouper<G, K extends EnumKey, V extends ArgInterface> {
         Map<G, List<EnumArgPair<K,V>>> raw =
                 argGroup.stream()
                         .map(EnumArgPair::new)
-                        .collect(groupingBy(groupingFunc) );  // Consider returning an unmodifiable list (groupingBy(groupingFunc, Collectors.toUnmodifiableList()))
+                        .collect(groupingBy(groupingFunc, Collectors.toUnmodifiableList() ) );
         Map<G, ArgumentGroup<K,V>> groups =
                 new HashMap<>(raw.size(), 1);
         raw.forEach( (key, value) ->

@@ -9,7 +9,6 @@ import org.ericghara.argument.SingleValueArgument;
 import org.ericghara.utils.FileSystemUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 import java.util.List;
 import java.util.Set;
@@ -20,16 +19,14 @@ import static org.ericghara.argument.Id.ArgGroupKey.*;
 
 @Configuration
 @Slf4j
-public class ValidatorConfig {
+public class ArgsConfig {
 
     @Bean
-    @Order(50)
     BiFunction<ArgDefinition, List<String>, SingleValueArgument> SingleValArgumentConstructor() {
         return SingleValueArgument::new;
     }
 
     @Bean
-    @Order(100)
     ArgumentGroup<AppArg, ArgDefinition> OptionValidatorsBean() {
         ArgumentGroup<AppArg, ArgDefinition> args = new ArgumentGroup<>();
 

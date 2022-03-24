@@ -31,7 +31,6 @@ public class ResultsPrinter implements ApplicationListener<ApplicationReadyEvent
     private final FileChecker checker;
     private final FoundArgs<AppArg,
             ArgDefinition, SingleValueArgument> foundArgs;
-    private BiConsumer<List<HashPair>, List<HashPair>> printer;
     private String hashFormat;
 
     @Override
@@ -39,7 +38,7 @@ public class ResultsPrinter implements ApplicationListener<ApplicationReadyEvent
         var valid = checker.getValid();
         var invalid = checker.getInvalid();
         hashFormat = "%-" + selectHashSize() + "s";
-        printer = selectPrinter();
+        var printer = selectPrinter();
         printer.accept(valid, invalid);
     }
 
@@ -50,7 +49,7 @@ public class ResultsPrinter implements ApplicationListener<ApplicationReadyEvent
             return this::checkerPrinter;
         }
         else if (mode.contains(SNAPSHOT) ) {
-            return this::generatorPrinter;
+            return this::snapshotPrinter;
         }
         else {
             throw new ImproperApplicationArgumentsException(
@@ -77,7 +76,7 @@ public class ResultsPrinter implements ApplicationListener<ApplicationReadyEvent
         };
     }
 
-    void generatorPrinter(List<HashPair> valid, List<HashPair> invalid) {
+    void snapshotPrinter(List<HashPair> valid, List<HashPair> invalid) {
         if (invalid.isEmpty() ) {
             System.out.printf("Unrecoverable error.  Could not hash the following files:%n");
             invalid.forEach( (r) -> System.out.println(r.expected().path() ) );

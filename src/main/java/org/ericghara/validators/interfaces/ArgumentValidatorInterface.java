@@ -1,4 +1,4 @@
-package org.ericghara.validators;
+package org.ericghara.validators.interfaces;
 
 public interface ArgumentValidatorInterface {
 

@@ -76,6 +76,7 @@ public class FileLister {
             walkStream.add(fileHash);
             return FileVisitResult.CONTINUE;
         }
+
         @Override
         public FileVisitResult visitFileFailed(Path file, IOException exc) {
             ignoredFiles++;
@@ -84,10 +85,12 @@ public class FileLister {
             exc.addSuppressed(new IOException() );
             return FileVisitResult.CONTINUE;
         }
+
         @Override
         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
             return FileVisitResult.CONTINUE;
         }
+
         @Override
         public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
             if (Objects.nonNull(exc) ) {

@@ -26,8 +26,6 @@ public class FileListLineGenerator {
                                 hashRange);
     }
 
-
-
     boolean match(String text, int[] pathRange, int[] hashRange) {
         path.reset(text);
         hash.reset(text);

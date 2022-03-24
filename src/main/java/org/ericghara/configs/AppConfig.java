@@ -17,7 +17,6 @@ import org.ericghara.validators.ArgumentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
@@ -30,21 +29,20 @@ import static org.ericghara.argument.Id.ArgGroupKey.*;
 
 @Configuration
 @Slf4j
-public class ParserConfig {
+public class AppConfig {
+
     @Autowired
     FileLister fileLister;
     @Autowired
     FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs;
 
-
     @Bean
-    @Order(200)
     MatcherGroup<AppArg> configMatchers(FoundArgs<AppArg,ArgDefinition, SingleValueArgument> foundArgs) {
         var source = foundArgs.getFound(REQUIRED)
                                       .get(SOURCE)
                                       .value();
         List<Entry<AppArg,Matcher>> entries = List.of(
-                new SimpleImmutableEntry<>(MD5,Matchers.probableMD5() ),
+                new SimpleImmutableEntry<>(MD5, Matchers.probableMD5() ),
                 new SimpleImmutableEntry<>(SHA_1, Matchers.probableSHA1() ),
                 new SimpleImmutableEntry<>(SHA_256, Matchers.probableSHA256() ),
                 new SimpleImmutableEntry<>(NO_HASH, Matchers.matchEOL() ),
@@ -54,11 +52,9 @@ public class ParserConfig {
     }
 
     @Bean
-    @Order(300)
     FileListLineGenerator fileListLineGeneratorBean(ArgumentValidator<AppArg, ArgDefinition, SingleValueArgument> validator,
                                                     MatcherGroup<AppArg> matchers,
                                                     FoundArgs<AppArg,ArgDefinition,SingleValueArgument> foundArgs) throws IllegalArgumentException{
-        // change this to actually check to make sure one of the required is there;
         if (!validator.isValid() ) {
             log.info("Invalid command line arguments.  Application startup failed.");
             System.out.println("Application startup failed.  See log.");
@@ -73,7 +69,6 @@ public class ParserConfig {
     }
 
     @Bean
-    @Order(400)
     Stream<? extends FileHashInterface> streamFileListLineBean(FileListLineGenerator lineGenerator) {
         var mode = foundArgs.getFound(MODE).getArgIds();
         if (mode.contains(SNAPSHOT) ) {

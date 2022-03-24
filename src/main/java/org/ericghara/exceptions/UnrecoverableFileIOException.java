@@ -1,6 +1,7 @@
 package org.ericghara.exceptions;
 
 public class UnrecoverableFileIOException extends RuntimeException {
+
     public UnrecoverableFileIOException() {
     }
 

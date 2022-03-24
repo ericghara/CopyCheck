@@ -1,7 +1,7 @@
 package org.ericghara.validators;
 
 import org.ericghara.argument.ArgDefinition;
-import org.ericghara.configs.ValidatorConfig;
+import org.ericghara.configs.ArgsConfig;
 import org.ericghara.utils.FileSystemUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
-@SpringBootTest(classes = {ValidatorConfig.class,ArgumentValidator.class, FileSystemUtils.class})
+@SpringBootTest(classes = {ArgsConfig.class,ArgumentValidator.class, FileSystemUtils.class})
 class ArgumentValidatorTest {
 
     @Autowired

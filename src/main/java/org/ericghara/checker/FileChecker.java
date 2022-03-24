@@ -10,6 +10,7 @@ import org.ericghara.argument.Id.AppArg;
 import org.ericghara.argument.Id.ArgGroupKey;
 import org.ericghara.argument.SingleValueArgument;
 import org.ericghara.checker.interfaces.HashMatcher;
+import org.ericghara.checker.interfaces.Hasher;
 import org.ericghara.exceptions.ImproperApplicationArgumentsException;
 import org.ericghara.exceptions.NoRecognizedFilesException;
 import org.ericghara.parser.Interfaces.FileHashInterface;
@@ -38,22 +39,23 @@ public class FileChecker {
 
     private final Path source;
     private final Path destination;
-    private final String hashAlgoStr;
     private final AppArg hashAlgo;
-    final HashMatcher matcher;
-    final Map<Boolean, List<HashPair>> results;
+    private final String hashAlgoStr;
+    private final HashMatcher matcher;
+    private final Hasher hasher;
+    private final Map<Boolean, List<HashPair>> results;
     
 
     public FileChecker(Stream<? extends FileHashInterface> lines,
                        FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs,
                        MatcherGroup<AppArg> matchers) {
+
         var required = foundArgs.getFound(REQUIRED);
         source = Paths.get(getValue(SOURCE, required) );
         destination = getDestination(foundArgs);
         this.hashAlgo = oneMatchOrThrows(HASH_ALGO, foundArgs);
-        hashAlgoStr = foundArgs.getAll()
-                               .get(hashAlgo)
-                               .name();
+        hashAlgoStr = getHashAlgoStr(foundArgs);
+        hasher = getHasher();
         matcher = NormalMatcher::isMatch;
         results = checkAll(lines);
     }
@@ -65,13 +67,14 @@ public class FileChecker {
     public List<HashPair> getInvalid() {
         return results.get(false);
     }
-    
-    
 
     Map<Boolean, List<HashPair>> checkAll(Stream<? extends FileHashInterface> lines) {
-        Map<Boolean,List<HashPair>> map = lines.map(this::hashALine).collect(Collectors.groupingBy(this::checkALine));
-        var t = map.putIfAbsent(true, new ArrayList<HashPair>() );
-        var f = map.putIfAbsent(false, new ArrayList<HashPair>() );
+        Map<Boolean,List<HashPair>> map = lines.map(this::hashALine)
+                                               .collect(Collectors.groupingBy(this::checkALine));
+        var t = map.putIfAbsent(true,
+                new ArrayList<HashPair>() );
+        var f = map.putIfAbsent(false,
+                new ArrayList<HashPair>() );
         if (Objects.isNull(t) && Objects.isNull(f) ) {
             throw new NoRecognizedFilesException("FileChecker received an empty job.");
         }
@@ -103,8 +106,7 @@ public class FileChecker {
             if (!Files.exists(absoluteDest) ) {
                 throw new IllegalStateException();
             }
-            found = hashAlgo == NO_HASH ? getBlank(absoluteDest, hashAlgoStr)
-                    : getHexHash(absoluteDest, hashAlgoStr);
+            found = hasher.hash(absoluteDest, hashAlgoStr);
         } catch(Exception e) {
             logHashFailure(absoluteDest);
             log.trace(e.toString() );
@@ -114,7 +116,6 @@ public class FileChecker {
         return new HashPair(expectedHash,
                 new FileHash(expectedHash.lineNum(), absoluteDest.toString(), found));
     }
-
 
     boolean checkALine(HashPair pair) {
         var expected = pair.expected().hash();
@@ -135,8 +136,18 @@ public class FileChecker {
         } else {
             log.info(format("Failure reading destination file: %s.", absoluteDest));
         }
-    } 
+    }
 
+    String getHashAlgoStr(FoundArgs<AppArg,ArgDefinition, SingleValueArgument> foundArgs) {
+        return foundArgs.getAll()
+                        .get(hashAlgo)
+                        .name();
+    }
+
+    Hasher getHasher() {
+        return hashAlgo == NO_HASH ? this::getBlank
+                : this::getHexHash;
+    }
 
     String getHexHash(@NonNull Path path, String hashAlgo) throws IOException {
         var digestUtils = new DigestUtils(hashAlgo);

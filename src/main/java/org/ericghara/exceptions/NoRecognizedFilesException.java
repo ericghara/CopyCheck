@@ -1,6 +1,7 @@
 package org.ericghara.exceptions;
 
 public class NoRecognizedFilesException extends RuntimeException {
+
     public NoRecognizedFilesException() {
         super();
     }

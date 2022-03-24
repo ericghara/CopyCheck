@@ -2,7 +2,6 @@ package org.ericghara.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -12,7 +11,6 @@ import java.nio.file.Paths;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 @Slf4j
-@Component
 public class FileSystemUtils {
 
     @NonNull
