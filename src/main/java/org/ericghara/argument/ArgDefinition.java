@@ -30,8 +30,9 @@ public record ArgDefinition(String name,
             return false;
         }
 
-        boolean valid = minOptions <= 0 || options.stream()
-                .allMatch(validatorFunc::apply);
+        boolean valid = minOptions <= 0 ||
+                Objects.isNull(validatorFunc) ||
+                options.stream().allMatch(validatorFunc::apply);
         if (!valid) {
             log.info(format("Received an invalid argument " +
                     "option for the --%s argument.", name) );

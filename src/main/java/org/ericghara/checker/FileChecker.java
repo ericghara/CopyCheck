@@ -14,7 +14,7 @@ import org.ericghara.argument.SingleValueArgument;
 import org.ericghara.checker.interfaces.HashMatcher;
 import org.ericghara.exceptions.ImproperApplicationArgumentsException;
 import org.ericghara.exceptions.NoRecognizedFilesException;
-import org.ericghara.parser.FileListLine;
+import org.ericghara.parser.Interfaces.FileHashInterface;
 import org.ericghara.parser.MatcherGroup;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +34,7 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static org.ericghara.argument.Id.AppArg.*;
-import static org.ericghara.argument.Id.ArgGroupKey.HASH_ALGO;
-import static org.ericghara.argument.Id.ArgGroupKey.REQUIRED;
+import static org.ericghara.argument.Id.ArgGroupKey.*;
 
 @Component
 @Slf4j
@@ -46,49 +45,50 @@ public class FileChecker {
     private final String hashAlgoStr;
     private final AppArg hashAlgo;
     final HashMatcher matcher;
-    final Map<Boolean, List<FileListLine>> results; 
+    final Map<Boolean, List<HashPair>> results;
     
 
-    public FileChecker(Stream<FileListLine> lines,
+    public FileChecker(Stream<? extends FileHashInterface> lines,
                        FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs,
                        MatcherGroup<AppArg> matchers) {
         var required = foundArgs.getFound(REQUIRED);
         source = Paths.get(getValue(SOURCE, required) );
-        destination = Paths.get(getValue(DESTINATION, required) );
+        destination = getDestination(foundArgs);
         this.hashAlgo = oneMatchOrThrows(HASH_ALGO, foundArgs);
         hashAlgoStr = foundArgs.getAll()
                                .get(hashAlgo)
                                .name();
-        matcher = getHashMatcher(hashAlgo);
+        matcher = NormalMatcher::isMatch;
         results = checkAll(lines);
     }
     
-    public List<FileListLine> getValid() {
+    public List<HashPair> getValid() {
         return results.get(true);
     }
     
-    public List<FileListLine> getInvalid() {
+    public List<HashPair> getInvalid() {
         return results.get(false);
     }
     
     
 
-    Map<Boolean, List<FileListLine>> checkAll(Stream<FileListLine> lines) {
-        Map<Boolean,List<FileListLine>> map = lines.collect(Collectors.groupingBy(this::checkALine));
-        var t = map.putIfAbsent(true, new ArrayList<FileListLine>() );
-        var f = map.putIfAbsent(false, new ArrayList<FileListLine>() );
+    Map<Boolean, List<HashPair>> checkAll(Stream<? extends FileHashInterface> lines) {
+        Map<Boolean,List<HashPair>> map = lines.map(this::hashALine).collect(Collectors.groupingBy(this::checkALine));
+        var t = map.putIfAbsent(true, new ArrayList<HashPair>() );
+        var f = map.putIfAbsent(false, new ArrayList<HashPair>() );
         if (Objects.isNull(t) && Objects.isNull(f) ) {
             throw new NoRecognizedFilesException("FileChecker received an empty job.");
         }
         return map;
     }
 
-    boolean checkALine(FileListLine line) {
+    HashPair hashALine(FileHashInterface expectedHash) {
         String found;
         Path absoluteDest;
         try {
-            Path relativeSource = source.relativize(Paths.get(line.path() ) );
-            absoluteDest = destination.resolve(relativeSource);
+            Path relativeSource = source.relativize(Paths.get(expectedHash.path() ) );
+            absoluteDest = destination.resolve(relativeSource)
+                                      .toAbsolutePath();
         } catch (Exception e) {
             if (e instanceof IllegalArgumentException) {
                 log.debug("Could not get Hash.  Likely unable to relativize paths " +
@@ -99,7 +99,8 @@ public class FileChecker {
                 log.debug("unknown exception");
                 e.printStackTrace();
             }
-            return false;
+            return new HashPair(expectedHash,
+                    new FileHash(expectedHash.lineNum(), "???", "File Read Error"));
         }
         try {
             log.trace("Attempting to hash: " + absoluteDest);
@@ -111,9 +112,18 @@ public class FileChecker {
         } catch(Exception e) {
             logHashFailure(absoluteDest);
             log.trace(e.toString() );
-            return false;
+            return new HashPair(expectedHash,
+                    new FileHash(expectedHash.lineNum(), absoluteDest.toString(), "Hash Failure"));
         }
-        return matcher.isMatch(line.hash(), found);
+        return new HashPair(expectedHash,
+                new FileHash(expectedHash.lineNum(), absoluteDest.toString(), found));
+    }
+
+
+    boolean checkALine(HashPair pair) {
+        var expected = pair.expected().hash();
+        var found = pair.found().hash();
+        return matcher.isMatch(expected, found);
     }
     
     private void logHashFailure(Path absoluteDest) {
@@ -141,14 +151,22 @@ public class FileChecker {
         return "";
     }
 
-    HashMatcher getHashMatcher(AppArg hashAlgo) {
-        return hashAlgo.equals(NO_HASH) ?
-                AlwaysTrue::isMatch : NormalMatcher::isMatch;
-    }
-
-
     String getValue(AppArg argId, ArgumentGroup<AppArg, SingleValueArgument> group) {
         return group.get(argId).value();
+    }
+
+    Path getDestination(FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs) {
+        // This method is key for configuring this instance for snapshot vs checker operation
+        var mode = foundArgs.getFound(MODE);
+        var destDef = mode.get(DESTINATION);
+        if (Objects.nonNull(destDef) ) {
+            return Paths.get(destDef.value() );
+        }
+        else if (mode.getArgIds().contains(SNAPSHOT) ) {
+            return source;
+        }
+        throw new ImproperApplicationArgumentsException(
+                "Unrecognized mode setting.  This is likely caused by an improper app configuration.");
     }
 
     String getHashAlgo(ArgumentGroup<AppArg, SingleValueArgument> optional) {

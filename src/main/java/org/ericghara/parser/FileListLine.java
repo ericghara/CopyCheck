@@ -1,10 +1,12 @@
 package org.ericghara.parser;
 
+import org.ericghara.parser.Interfaces.FileHashInterface;
+
 public record FileListLine(String text,
-                    int lineNum,
-                    boolean isMatch,
-                    int[] pathRange,
-                    int[] hashRange) {
+                           int lineNum,
+                           boolean isMatch,
+                           int[] pathRange,
+                           int[] hashRange) implements FileHashInterface {
 
     public String path() {
         return getSubString(pathRange);

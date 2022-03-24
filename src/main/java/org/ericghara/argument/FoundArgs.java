@@ -24,7 +24,7 @@ import static org.ericghara.argument.Id.ArgGroupKey.*;
 public class FoundArgs<K extends EnumKey, V extends ArgDefinitionInterface, U extends ArgValuesInterface> {
 
     static final List<ArgGroupKey> GROUP_FILTERS =
-            List.of(REQUIRED, HASH_ALGO, LIST_FORMAT);
+            List.of(REQUIRED, MODE, HASH_ALGO, LIST_FORMAT);
 
     private Map<ArgGroupKey, ArgumentGroup<K,V>> sortedAll;
     private Map<ArgGroupKey, ArgumentGroup<K,U>> sortedFound;

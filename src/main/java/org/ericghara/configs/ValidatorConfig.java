@@ -36,15 +36,18 @@ public class ValidatorConfig {
         ArgumentGroup<AppArg, ArgDefinition> args = new ArgumentGroup<>();
 
         Set<EnumKey> required = Set.of(REQUIRED);
+        Set<EnumKey> mode = Set.of(MODE);
         Set<EnumKey> optional = Set.of(OPTIONAL);
         Set<EnumKey> optHashAlgo = Set.of(OPTIONAL,HASH_ALGO);
 
         args.add(SOURCE_FILE_LIST, new ArgDefinition(
-                "srcFileList", FileSystemUtils::isFile, 1, 1, required) );
+                "srcFileList", null, 1, 1, required) );
         args.add(SOURCE, new ArgDefinition(
                 "source", FileSystemUtils::isAbsolute, 1, 1, required) );
         args.add(DESTINATION, new ArgDefinition(
-                "destination", FileSystemUtils::isDir, 1, 1, required) );
+                "destination", FileSystemUtils::isDir, 1, 1, mode) );
+        args.add(SNAPSHOT, new ArgDefinition(
+                "snapshot", null, 0, 0, Set.of(MODE, DEFAULT) ) );
         // Hash algo names should correspond with: https://docs.oracle.com/en/java/javase/11/docs/specs/security/standard-names.html#messagedigest-algorithms
         // The argument name is what's being used to specify the hash algorithm.  The only exception is NO-HASH, which means only the existence of a file
         // will be tested.

@@ -8,9 +8,11 @@ import org.ericghara.argument.FoundArgs;
 import org.ericghara.argument.Id.AppArg;
 import org.ericghara.argument.SingleValueArgument;
 import org.ericghara.checker.FileChecker;
-import org.ericghara.parser.FileListLine;
+import org.ericghara.exceptions.ImproperApplicationArgumentsException;
 import org.ericghara.parser.FileListLineGenerator;
 import org.ericghara.parser.FileListParser;
+import org.ericghara.parser.FileLister;
+import org.ericghara.parser.Interfaces.FileHashInterface;
 import org.ericghara.parser.MatcherGroup;
 import org.ericghara.parser.Matchers;
 import org.ericghara.validators.ArgumentValidator;
@@ -39,6 +41,8 @@ public class ParserConfig {
     ApplicationArguments appArgs;
     @Autowired
     ArgWithValuesGroupGenerator<AppArg> argGroupGenerator;
+    @Autowired
+    FileLister fileLister;
     @Autowired
     ArgumentGroup<AppArg, ArgDefinition> allArgs;
     @Autowired
@@ -99,9 +103,16 @@ public class ParserConfig {
 
     @Bean
     @Order(400)
-    Stream<FileListLine> streamFileListLineBean(FileListLineGenerator lineGenerator) {
-        var parser = new FileListParser<SingleValueArgument>(lineGenerator, foundArgs);
-        return parser.matchStream();
+    Stream<? extends FileHashInterface> streamFileListLineBean(FileListLineGenerator lineGenerator) {
+        var mode = foundArgs.getFound(MODE).getArgIds();
+        if (mode.contains(SNAPSHOT) ) {
+            return fileLister.stream();
+        }
+        else if (mode.contains(DESTINATION) ) {
+            var parser = new FileListParser<SingleValueArgument>(lineGenerator, foundArgs);
+            return parser.matchStream();
+        }
+        throw new ImproperApplicationArgumentsException("Unrecognized mode setting");
     }
 
 //    @Bean
