@@ -198,5 +198,26 @@ Summary: 1 of 1 are valid
 ### Explanation
 Here we used a <em>source</em> that was a child directory of the snapshot source, because we only copied a child directory.  The <em>destination</em> was similarly modified.  CopyCheck only parsed files that were children of ```./src/test/resources/demo/childFolder```, this allowed us to confirm the copy of ```childFolder``` to ```newChildFolder``` without creating a new snapshot.
 
-
-
+## Tech
+<table>
+    <tbody>
+        <tr>
+            <td>
+                <ul> 
+                    <li>Java 17</li>
+                    <li>Gradle</li>
+                    <li>Spring Boot</li>
+                    <li>Mockito</li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li>JUnit 5</li>
+                    <li>Lombok</li>
+                    <li>Apache Commons Codec</li>
+                </ul>
+                <br>
+            </td>
+        </tr>
+    </tbody>
+</table>
