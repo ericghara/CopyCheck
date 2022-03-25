@@ -30,6 +30,10 @@ public class ArgumentValidator<K extends EnumKey, V extends ArgDefinitionInterfa
         isValid = isValid(foundArgs, appArgs);
     }
 
+    ArgumentValidator(){
+        isValid = false;
+    }
+
     boolean isValid(FoundArgs<K,V,U> foundArgs, ApplicationArguments appArguments) {
         var all = foundArgs.getAllDefined();
         log.debug("Received the following argument names: " + all);

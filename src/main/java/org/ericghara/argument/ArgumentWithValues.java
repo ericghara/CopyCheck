@@ -1,7 +1,6 @@
 package org.ericghara.argument;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import org.ericghara.argument.Id.EnumKey;
@@ -13,7 +12,6 @@ import java.util.Set;
 
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class ArgumentWithValues implements ArgValuesInterface {
 
     @NonNull

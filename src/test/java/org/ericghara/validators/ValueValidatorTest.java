@@ -1,24 +1,27 @@
 package org.ericghara.validators;
 
 import org.ericghara.argument.ArgDefinition;
-import org.ericghara.utils.FileSystemUtils;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
 import org.mockito.internal.stubbing.answers.ReturnsElementsOf;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
-@SpringBootTest(classes={FileSystemUtils.class})
+@ExtendWith(MockitoExtension.class)
 class ValueValidatorTest {
 
-    @MockBean
-    FileSystemUtils fsUtils;
+    @Mock
+    Function<String,Boolean> validatorFunc;
+
 
     @ParameterizedTest(name = "[{index}] {0}")
     @CsvSource(useHeadersInDisplayName = true, delimiter = '|', textBlock = """
@@ -35,10 +38,8 @@ class ValueValidatorTest {
                   int minValues, int maxValues, boolean expected) {
         List<String> valueList = Shared.listify(values, String::toString);
         List<Boolean> validatorResList = Shared.listify(validatorFuncRes, Boolean::parseBoolean);
-
-        when(fsUtils.isDir(any(String.class)))
-                .thenAnswer(new ReturnsElementsOf(validatorResList));
-        var valueValidator = new ArgDefinition("unitTest", fsUtils::isDir, minValues, maxValues);
+        lenient().when(validatorFunc.apply(any(String.class))).thenAnswer(new ReturnsElementsOf(validatorResList));
+        var valueValidator = new ArgDefinition("unitTest", validatorFunc, minValues, maxValues, Set.of() );
         assertEquals(expected, valueValidator.validate(valueList));
     }
 
