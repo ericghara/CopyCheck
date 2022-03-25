@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ericghara.argument.ArgDefinition;
 import org.ericghara.argument.FoundArgs;
 import org.ericghara.argument.Id.AppArg;
-import org.ericghara.argument.SingleValueArgument;
+import org.ericghara.argument.SingleValueArg;
 import org.ericghara.exceptions.ImproperApplicationArgumentsException;
 import org.ericghara.exceptions.UnrecoverableFileIOException;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -30,7 +30,7 @@ public class ResultsPrinter implements ApplicationListener<ApplicationReadyEvent
 
     private final FileChecker checker;
     private final FoundArgs<AppArg,
-            ArgDefinition, SingleValueArgument> foundArgs;
+            ArgDefinition, SingleValueArg> foundArgs;
     private String hashFormat;
 
     @Override

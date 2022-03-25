@@ -6,9 +6,9 @@ import org.ericghara.argument.interfaces.SingleValueArgInterface;
 
 import java.util.List;
 
-public class SingleValueArgument extends ArgumentWithValues implements SingleValueArgInterface {
+public class SingleValueArg extends ArgWithValues implements SingleValueArgInterface {
 
-    public SingleValueArgument(@NonNull ArgDefinitionInterface definition, List<String> values) {
+    public SingleValueArg(@NonNull ArgDefinitionInterface definition, List<String> values) {
         super(definition, values);
     }
 

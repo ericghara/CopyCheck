@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ericghara.argument.ArgDefinition;
 import org.ericghara.argument.FoundArgs;
 import org.ericghara.argument.Id.AppArg;
-import org.ericghara.argument.SingleValueArgument;
+import org.ericghara.argument.SingleValueArg;
 import org.ericghara.checker.FileHash;
 import org.ericghara.exceptions.ImproperApplicationArgumentsException;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ import static org.ericghara.argument.Id.ArgGroupKey.REQUIRED;
 @AllArgsConstructor
 public class FileLister {
 
-    private final FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs;
+    private final FoundArgs<AppArg, ArgDefinition, SingleValueArg> foundArgs;
     
     public Stream<FileHash> stream() {
         var visitor = new FileVisitor();

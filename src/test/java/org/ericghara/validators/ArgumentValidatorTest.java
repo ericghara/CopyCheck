@@ -4,11 +4,10 @@ import org.ericghara.argument.ArgDefinition;
 import org.ericghara.argument.ArgumentGroup;
 import org.ericghara.argument.FoundArgs;
 import org.ericghara.argument.Id.AppArg;
-import org.ericghara.argument.SingleValueArgument;
+import org.ericghara.argument.SingleValueArg;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.stubbing.answers.ReturnsElementsOf;
 import org.springframework.boot.ApplicationArguments;
@@ -26,19 +25,19 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(classes={ArgumentValidatorTest.class})
 class ArgumentValidatorTest {
 
-    ArgumentValidator<AppArg, ArgDefinition, SingleValueArgument> argValidator;
+    ArgumentValidator<AppArg, ArgDefinition, SingleValueArg> argValidator;
 
     @MockBean
     ApplicationArguments appArguments;
 
     @MockBean
-    FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs;
+    FoundArgs<AppArg, ArgDefinition, SingleValueArg> foundArgs;
 
     @MockBean
     ArgumentGroup<AppArg, ArgDefinition> argumentDefGroup;
 
-    @Mock
-    ArgumentGroup<AppArg, SingleValueArgument> argumentValGroup;
+    @MockBean
+    ArgumentGroup<AppArg, SingleValueArg> argumentValGroup;
 
     @BeforeEach
     void before() {
@@ -55,7 +54,7 @@ class ArgumentValidatorTest {
             """)
     void isValid(String _label, boolean recognized, boolean required, boolean all, boolean expected) {
         when(foundArgs.getAllDefined() ).thenReturn(null);
-        ArgumentValidator<AppArg, ArgDefinition, SingleValueArgument> spy
+        ArgumentValidator<AppArg, ArgDefinition, SingleValueArg> spy
                 = Mockito.spy(argValidator);
         doReturn(recognized).when(spy)
                             .allRecognized(any(), any(ApplicationArguments.class) );
@@ -77,10 +76,10 @@ class ArgumentValidatorTest {
         List<Boolean> validatorRes = listify(validatorResStr, Boolean::parseBoolean);
         List<List<String>> optionVals = listify(optionValStr, List::of);
         int numArgs = optionVals.size();
-        var args = new HashSet<SingleValueArgument>();
+        var args = new HashSet<SingleValueArg>();
 
         for (int i = 0; i < numArgs; i++) {
-            var m = mock(SingleValueArgument.class);
+            var m = mock(SingleValueArg.class);
             when(m.validate(any() ) ).thenReturn(validatorRes.get(i) );
             when(m.values() ).thenAnswer(new ReturnsElementsOf(optionVals) );
             args.add(m);

@@ -5,7 +5,7 @@ import org.ericghara.argument.ArgDefinition;
 import org.ericghara.argument.ArgumentGroup;
 import org.ericghara.argument.Id.AppArg;
 import org.ericghara.argument.Id.EnumKey;
-import org.ericghara.argument.SingleValueArgument;
+import org.ericghara.argument.SingleValueArg;
 import org.ericghara.utils.FileSystemUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +22,8 @@ import static org.ericghara.argument.Id.ArgGroupKey.*;
 public class ArgsConfig {
 
     @Bean
-    BiFunction<ArgDefinition, List<String>, SingleValueArgument> SingleValArgumentConstructor() {
-        return SingleValueArgument::new;
+    BiFunction<ArgDefinition, List<String>, SingleValueArg> SingleValArgumentConstructor() {
+        return SingleValueArg::new;
     }
 
     @Bean

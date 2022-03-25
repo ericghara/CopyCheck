@@ -3,10 +3,10 @@ package org.ericghara.parser;
 import lombok.extern.slf4j.Slf4j;
 import org.ericghara.argument.ArgDefinition;
 import org.ericghara.argument.ArgumentGroup;
-import org.ericghara.argument.ArgumentWithValues;
+import org.ericghara.argument.ArgWithValues;
 import org.ericghara.argument.FoundArgs;
 import org.ericghara.argument.Id.AppArg;
-import org.ericghara.argument.SingleValueArgument;
+import org.ericghara.argument.SingleValueArg;
 import org.ericghara.exceptions.UnrecoverableFileIOException;
 import org.ericghara.utils.FileSystemUtils;
 import org.springframework.stereotype.Component;
@@ -22,13 +22,13 @@ import static org.ericghara.argument.Id.ArgGroupKey.REQUIRED;
 
 @Component
 @Slf4j
-public class FileListParser<V extends ArgumentWithValues> {
+public class FileListParser<V extends ArgWithValues> {
 
     private final FileListLineGenerator generator;
     private final File sourceFileList;
 
     public FileListParser(FileListLineGenerator generator,
-                          FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs) {
+                          FoundArgs<AppArg, ArgDefinition, SingleValueArg> foundArgs) {
         this.generator = generator;
         sourceFileList = FileSystemUtils.getFile(getValue(SOURCE_FILE_LIST, foundArgs.getFound(REQUIRED) ) );
     }
@@ -57,7 +57,7 @@ public class FileListParser<V extends ArgumentWithValues> {
         }
     }
 
-    String getValue(AppArg argId, ArgumentGroup<AppArg,SingleValueArgument> group) {
+    String getValue(AppArg argId, ArgumentGroup<AppArg, SingleValueArg> group) {
         return group.get(argId)
                     .value();
     }

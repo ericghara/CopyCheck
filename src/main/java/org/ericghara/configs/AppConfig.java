@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ericghara.argument.ArgDefinition;
 import org.ericghara.argument.FoundArgs;
 import org.ericghara.argument.Id.AppArg;
-import org.ericghara.argument.SingleValueArgument;
+import org.ericghara.argument.SingleValueArg;
 import org.ericghara.checker.FileChecker;
 import org.ericghara.exceptions.ImproperApplicationArgumentsException;
 import org.ericghara.parser.FileListLineGenerator;
@@ -34,10 +34,10 @@ public class AppConfig {
     @Autowired
     FileLister fileLister;
     @Autowired
-    FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs;
+    FoundArgs<AppArg, ArgDefinition, SingleValueArg> foundArgs;
 
     @Bean
-    MatcherGroup<AppArg> configMatchers(FoundArgs<AppArg,ArgDefinition, SingleValueArgument> foundArgs) {
+    MatcherGroup<AppArg> configMatchers(FoundArgs<AppArg,ArgDefinition, SingleValueArg> foundArgs) {
         var source = foundArgs.getFound(REQUIRED)
                                       .get(SOURCE)
                                       .value();
@@ -52,9 +52,9 @@ public class AppConfig {
     }
 
     @Bean
-    FileListLineGenerator fileListLineGeneratorBean(ArgumentValidator<AppArg, ArgDefinition, SingleValueArgument> validator,
+    FileListLineGenerator fileListLineGeneratorBean(ArgumentValidator<AppArg, ArgDefinition, SingleValueArg> validator,
                                                     MatcherGroup<AppArg> matchers,
-                                                    FoundArgs<AppArg,ArgDefinition,SingleValueArgument> foundArgs) throws IllegalArgumentException{
+                                                    FoundArgs<AppArg,ArgDefinition, SingleValueArg> foundArgs) throws IllegalArgumentException{
         if (!validator.isValid() ) {
             log.info("Invalid command line arguments.  Application startup failed.");
             System.out.println("Application startup failed.  See log.");
@@ -75,7 +75,7 @@ public class AppConfig {
             return fileLister.stream();
         }
         else if (mode.contains(DESTINATION) ) {
-            var parser = new FileListParser<SingleValueArgument>(lineGenerator, foundArgs);
+            var parser = new FileListParser<SingleValueArg>(lineGenerator, foundArgs);
             return parser.matchStream();
         }
         throw new ImproperApplicationArgumentsException("Unrecognized mode setting");

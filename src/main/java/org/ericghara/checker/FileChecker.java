@@ -8,7 +8,7 @@ import org.ericghara.argument.ArgumentGroup;
 import org.ericghara.argument.FoundArgs;
 import org.ericghara.argument.Id.AppArg;
 import org.ericghara.argument.Id.ArgGroupKey;
-import org.ericghara.argument.SingleValueArgument;
+import org.ericghara.argument.SingleValueArg;
 import org.ericghara.checker.interfaces.HashMatcher;
 import org.ericghara.checker.interfaces.Hasher;
 import org.ericghara.exceptions.ImproperApplicationArgumentsException;
@@ -47,7 +47,7 @@ public class FileChecker {
     
 
     public FileChecker(Stream<? extends FileHashInterface> lines,
-                       FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs,
+                       FoundArgs<AppArg, ArgDefinition, SingleValueArg> foundArgs,
                        MatcherGroup<AppArg> matchers) {
 
         var required = foundArgs.getFound(REQUIRED);
@@ -138,7 +138,7 @@ public class FileChecker {
         }
     }
 
-    String getHashAlgoStr(FoundArgs<AppArg,ArgDefinition, SingleValueArgument> foundArgs) {
+    String getHashAlgoStr(FoundArgs<AppArg,ArgDefinition, SingleValueArg> foundArgs) {
         return foundArgs.getAll()
                         .get(hashAlgo)
                         .name();
@@ -158,11 +158,11 @@ public class FileChecker {
         return "";
     }
 
-    String getValue(AppArg argId, ArgumentGroup<AppArg, SingleValueArgument> group) {
+    String getValue(AppArg argId, ArgumentGroup<AppArg, SingleValueArg> group) {
         return group.get(argId).value();
     }
 
-    Path getDestination(FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs) {
+    Path getDestination(FoundArgs<AppArg, ArgDefinition, SingleValueArg> foundArgs) {
         // This method is key for configuring this instance for snapshot vs checker operation
         var mode = foundArgs.getFound(MODE);
         var destDef = mode.get(DESTINATION);
@@ -177,7 +177,7 @@ public class FileChecker {
     }
 
     static public AppArg oneMatchOrThrows(ArgGroupKey key,
-                                   FoundArgs<AppArg, ArgDefinition, SingleValueArgument> foundArgs) {
+                                   FoundArgs<AppArg, ArgDefinition, SingleValueArg> foundArgs) {
         Set<AppArg> setArgs = foundArgs.getFound(key)
                 .getArgIds();
         if (setArgs.size() != 1) {

@@ -33,7 +33,8 @@ public class ArgWithValuesGroupGenerator<K extends EnumKey> {
             var name = argDef.name();
             // For values auto-set to default.  Improvement opportunity, should be a way to
             // parameterize defaults instead of assuming all null up to here are defaults with no options;
-            List<String> values = appArgs.containsOption(name) ? appArgs.getOptionValues(argDef.name() ) :
+            List<String> values = appArgs.containsOption(name) ?
+                    appArgs.getOptionValues(argDef.name() ) :
                     List.of();
 
             return new EnumArgPair<>(id, constructor.apply(argDef, values) );

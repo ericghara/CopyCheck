@@ -12,7 +12,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @ToString
-public class ArgumentWithValues implements ArgValuesInterface {
+public class ArgWithValues implements ArgValuesInterface {
 
     @NonNull
     ArgDefinitionInterface definition;
