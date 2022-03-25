@@ -22,7 +22,7 @@ public class ArgWithValuesGroupGenerator<K extends EnumKey> {
     // Uses constructor to convert input group into an ArgValue group output.  Keys remain
     // unchanged.
    public  <V extends ArgDefinitionInterface, U extends ArgValuesInterface>
-    ArgumentGroup<K, U>convert(ArgumentGroup<K, V> nameGroup,
+    ArgumentGroup<K, U> convert(ArgumentGroup<K, V> nameGroup,
                                     BiFunction<V, List<String>, U> constructor) {
 
         // used lambda because method signature was out of control...

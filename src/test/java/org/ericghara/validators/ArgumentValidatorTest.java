@@ -5,11 +5,12 @@ import org.ericghara.argument.ArgumentGroup;
 import org.ericghara.argument.FoundArgs;
 import org.ericghara.argument.Id.AppArg;
 import org.ericghara.argument.SingleValueArgument;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.stubbing.answers.ReturnsElementsOf;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,10 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes={ArgumentValidator.class})
+@SpringBootTest(classes={ArgumentValidatorTest.class})
 class ArgumentValidatorTest {
 
-    @Autowired
     ArgumentValidator<AppArg, ArgDefinition, SingleValueArgument> argValidator;
 
     @MockBean
@@ -37,8 +37,13 @@ class ArgumentValidatorTest {
     @MockBean
     ArgumentGroup<AppArg, ArgDefinition> argumentDefGroup;
 
-    @MockBean
+    @Mock
     ArgumentGroup<AppArg, SingleValueArgument> argumentValGroup;
+
+    @BeforeEach
+    void before() {
+        argValidator = new ArgumentValidator<>();
+    }
 
     @ParameterizedTest(name="[{index}] {0}")
     @CsvSource(useHeadersInDisplayName = true, delimiter = '|', textBlock = """

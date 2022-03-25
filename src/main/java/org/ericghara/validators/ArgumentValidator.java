@@ -8,6 +8,7 @@ import org.ericghara.argument.Id.EnumKey;
 import org.ericghara.argument.interfaces.ArgDefinitionInterface;
 import org.ericghara.argument.interfaces.ArgValuesInterface;
 import org.ericghara.validators.interfaces.ArgumentValidatorInterface;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +26,13 @@ public class ArgumentValidator<K extends EnumKey, V extends ArgDefinitionInterfa
     final private boolean isValid;
 
     @NonNull
+    @Autowired(required = true)
     public ArgumentValidator(FoundArgs<K, V, U> foundArgs,
                              ApplicationArguments appArgs) {
         isValid = isValid(foundArgs, appArgs);
     }
 
+    // for testing
     ArgumentValidator(){
         isValid = false;
     }
