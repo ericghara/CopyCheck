@@ -70,12 +70,12 @@ class ArgWithValuesGroupGeneratorTest {
         } );
 
 
-        var outgroup = generator.convert(inGroup, constructor);
+        var outGroup = generator.convert(inGroup, constructor);
 
         Arrays.asList(enums)
                 .forEach( e ->
                         assertIterableEquals(e.options,
-                                outgroup.get(e)
+                                outGroup.get(e)
                                         .values() ) );
     }
 
@@ -88,8 +88,8 @@ class ArgWithValuesGroupGeneratorTest {
         setGroup(enums);
         when(appArgs.containsOption(name ) ).thenReturn(false);
 
-        var outgroup = generator.convert(inGroup, constructor);
-        assertIterableEquals(List.of() , outgroup.get(A).values() );
+        var outGroup = generator.convert(inGroup, constructor);
+        assertIterableEquals(List.of() , outGroup.get(A).values() );
     }
 
 }

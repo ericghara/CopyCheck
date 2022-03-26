@@ -41,12 +41,13 @@ class ArgumentValidatorTest {
 
     @BeforeEach
     void before() {
+        // NoArgsConstructor only for testing.  DI prohibited
         argValidator = new ArgumentValidator<>();
     }
 
     @ParameterizedTest(name="[{index}] {0}")
     @CsvSource(useHeadersInDisplayName = true, delimiter = '|', textBlock = """
-            Label                      | recognized | required | all | expected
+            Label                      | recognized | required  |   all     | expected
             "unrecognized arg name"    |    false   |    true   |   true    | false
             "Improper required arg(s)" |    true    |    false  |   true    | false
             "Improper optional arg(s)" |    true    |    true   |   false   | false
@@ -67,7 +68,7 @@ class ArgumentValidatorTest {
 
     @ParameterizedTest(name="[{index}] {0}")
     @CsvSource(useHeadersInDisplayName = true, delimiter = '|', textBlock = """
-            Label            |    optionVals   | Validator Responses  | expected
+            Label            | optionVals | Validator Responses  | expected
             "invalid value"  |  A, B, C   |    true, false, true | false
             "all valid"      |  A, B, C   |    true, true, true  | true
             "No args"        |     ,      |           ,          | true
@@ -92,10 +93,10 @@ class ArgumentValidatorTest {
     @ParameterizedTest(name="[{index}] {0}")
     @CsvSource(useHeadersInDisplayName = true, delimiter = '|', textBlock = """
             # Any value greater than 0 indicates required
-            Label         | inputNames | validNames |  expected
-            "All Valid"   | A, B     | A, B, C  | true
-            "One Invalid" | A, B, C  | A, B     | false
-            "Empty input" |    ,     | A, B, C  | true
+            Label         | inputNames | validNames | expected
+            "All Valid"   | A, B       | A, B, C    |  true
+            "One Invalid" | A, B, C    | A, B       |  false
+            "Empty input" |    ,       | A, B, C    |  true
             """)
     void allRecognized(String _label, String inputNames, String validNames, boolean expected) {
         when(appArguments.getOptionNames() )

@@ -36,11 +36,17 @@ class ValueValidatorTest {
             """)
     void validate(String _label, String values, String validatorFuncRes,
                   int minValues, int maxValues, boolean expected) {
-        List<String> valueList = Shared.listify(values, String::toString);
-        List<Boolean> validatorResList = Shared.listify(validatorFuncRes, Boolean::parseBoolean);
-        lenient().when(validatorFunc.apply(any(String.class))).thenAnswer(new ReturnsElementsOf(validatorResList));
-        var valueValidator = new ArgDefinition("unitTest", validatorFunc, minValues, maxValues, Set.of() );
-        assertEquals(expected, valueValidator.validate(valueList));
+        List<String> valueList =
+                Shared.listify(values, String::toString);
+        List<Boolean> validatorResList =
+                Shared.listify(validatorFuncRes, Boolean::parseBoolean);
+        lenient().when(validatorFunc
+                 .apply(any(String.class)))
+                 .thenAnswer(new ReturnsElementsOf(validatorResList));
+        var valueValidator =
+                new ArgDefinition("unitTest", validatorFunc, minValues, maxValues, Set.of() );
+        assertEquals(expected,
+                valueValidator.validate(valueList));
     }
 
 }
